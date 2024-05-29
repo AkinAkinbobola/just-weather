@@ -3,7 +3,6 @@ import {Nunito} from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import {cn} from "@/lib/utils";
-import {NextUIProvider} from "@nextui-org/system";
 
 const nunito = Nunito(
     {
@@ -28,10 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en">
     <body className={cn("container", nunito.className)}>
-    <NextUIProvider>
     <Header/>
     {children}
-    </NextUIProvider>
     </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Search from "@/components/Search";
-import Converter from "@/components/Converter";
+import TempToggle from "@/components/TempToggle";
 
 const Header = () => {
     return (
@@ -13,7 +13,7 @@ const Header = () => {
 
             <Search/>
 
-            <Converter/>
+            <TempToggle/>
         </section>
     );
 };
