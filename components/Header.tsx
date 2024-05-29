@@ -9,7 +9,9 @@ const Header = () => {
                 src={"/assets/icons/logo.svg"}
                 alt={"Just Weather Logo"}
                 width={140}
-                height={20}/>
+                height={20}
+                className={"hidden sm:block"}
+            />
 
             <Search/>
 
