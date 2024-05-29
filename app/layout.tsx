@@ -2,6 +2,8 @@ import type {Metadata} from "next";
 import {Nunito} from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import {cn} from "@/lib/utils";
+import {NextUIProvider} from "@nextui-org/system";
 
 const nunito = Nunito(
     {
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
     title: "Just Weather",
     description: "Next JS Weather App",
     icons: {
-        icon: "/icons/logo.svg"
+        icon: "/assets/icons/logo.svg"
     }
 };
 
@@ -25,9 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-    <body className={nunito.className}>
+    <body className={cn("container", nunito.className)}>
+    <NextUIProvider>
     <Header/>
     {children}
+    </NextUIProvider>
     </body>
     </html>
   );
