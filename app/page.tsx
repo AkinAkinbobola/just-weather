@@ -1,16 +1,9 @@
 import Current from "@/components/Current";
 
-export type searchParamsType = {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-};
-const Home = ({ searchParams }: searchParamsType) => {
-  const search =
-    typeof searchParams.search === "string" ? searchParams.search : undefined;
+const Home = () => {
   return (
     <main>
-      <Current searchParams={search} />
+      <Current />
     </main>
   );
 };
