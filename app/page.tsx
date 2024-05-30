@@ -1,9 +1,12 @@
 import Current from "@/components/Current";
+import { Suspense } from "react";
 
 const Home = () => {
   return (
     <main>
-      <Current />
+      <Suspense>
+        <Current />
+      </Suspense>
     </main>
   );
 };
