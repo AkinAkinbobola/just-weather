@@ -4,26 +4,34 @@ import {useEffect, useState} from "react";
 import {useDebounce} from "use-debounce";
 import {useRouter} from "next/navigation";
 import {searchWeather} from "@/app/actions/weatherActions";
-import {cn} from "@/lib/utils";
 
 const Search = () => {
     const router = useRouter();
     const [searchInput, setSearchInput] = useState("");
     const [debouncedSearchInput] = useDebounce(searchInput, 500);
     const [showDropdown, setShowDropdown] = useState(false)
-
-
-    const searchHandler = async (query: string) => {
-        const cities = await searchWeather(query)
-    }
+    const [suggestions, setSuggestions] = useState<SearchResults[]>([])
 
     useEffect(() => {
-        if (debouncedSearchInput) {
-            router.push(`/?search=${debouncedSearchInput}`);
-        } else {
-            router.push("/");
+        const fetchSuggestions = async () => {
+            if (debouncedSearchInput) {
+                const data = await searchWeather(debouncedSearchInput)
+                if (data) {
+                    setSuggestions(data)
+                    setShowDropdown(true)
+                } else {
+                    setSuggestions([])
+                    setShowDropdown(false)
+                }
+            } else {
+                setSuggestions([])
+                setShowDropdown(false)
+            }
+
         }
-    }, [debouncedSearchInput, router]);
+        fetchSuggestions()
+
+    }, [debouncedSearchInput]);
 
     return (
         <div className="flex-grow relative">
@@ -36,6 +44,19 @@ const Search = () => {
                 onClick={() => setShowDropdown((prevState) => !prevState)}
             />
 
+            {
+                showDropdown && suggestions.length > 0 && (
+                    <ul>
+                        {
+                            suggestions.map((suggestion) => (
+                                <li key={suggestion.id}>
+                                    {suggestion.name} - {suggestion.country} - {suggestion.region}
+                                </li>
+                            ))
+                        }
+                    </ul>
+                )
+            }
 
 
 
