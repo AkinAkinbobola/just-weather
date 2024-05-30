@@ -1,4 +1,4 @@
-import type {Config} from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
@@ -7,7 +7,6 @@ const config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
-
   ],
   prefix: "",
   theme: {
@@ -23,11 +22,11 @@ const config = {
         // Site colors
         gray: {
           100: "#F5F5F5",
-          900: "#212121"
+          900: "#212121",
         },
         indigo: {
           50: "#E8EAF6",
-          400: "#5C6BC0"
+          400: "#5C6BC0",
         },
         blue: "#20233E",
 
@@ -73,12 +72,12 @@ const config = {
       },
       keyframes: {
         "accordion-down": {
-          from: {height: "0"},
-          to: {height: "var(--radix-accordion-content-height)"},
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {height: "var(--radix-accordion-content-height)"},
-          to: {height: "0"},
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
@@ -87,9 +86,7 @@ const config = {
       },
     },
   },
-  plugins: [
-    require('tailwindcss-animate')
-  ],
-} satisfies Config
+  plugins: [require("tailwindcss-animate"), "prettier-plugin-tailwindcss"],
+} satisfies Config;
 
-export default config
+export default config;

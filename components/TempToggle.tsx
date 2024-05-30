@@ -1,8 +1,8 @@
 "use client";
 
-import {Switch} from "@headlessui/react";
-import {useState} from "react";
-import {cn} from "@/lib/utils";
+import { Switch } from "@headlessui/react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const TempToggle = () => {
     const [enabled, setEnabled] = useState(false);
