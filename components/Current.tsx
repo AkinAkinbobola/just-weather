@@ -53,9 +53,7 @@ const CurrentWeather = () => {
   return (
     <>
       {!loading ? (
-        <section
-          className={"mt-12 flex justify-between items-center lg:col-span-8"}
-        >
+        <section className={"mt-12 flex justify-between items-center"}>
           <div className={"flex flex-col"}>
             <p className={"body text-gray-900/60"}>{time}</p>
 

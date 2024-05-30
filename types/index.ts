@@ -25,11 +25,22 @@ type CurrentResults = {
   };
 };
 
+type Hour = {
+  time: string;
+  temp_c: number;
+  temp_f: number;
+  condition: {
+    text: string;
+    icon: string;
+  };
+};
+
 type ForecastDay = {
   day: {
     mintemp_c: number;
     mintemp_f: number;
   };
+  hour: Hour[];
 };
 
 type MyLocation = {
