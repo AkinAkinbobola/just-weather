@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { useRouter } from "next/navigation";
 import { searchWeather } from "@/app/actions/weatherActions";
 
 const Search = () => {
-  const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
   const [showDropdown, setShowDropdown] = useState(false);
