@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "Just Weather",
     description: "Next JS Weather App",
     icons: {
-        icon: "/assets/icons/logo.svg"
+        icon: "/assets/icons/favicon.png"
     }
 };
 
