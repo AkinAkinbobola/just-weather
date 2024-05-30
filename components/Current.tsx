@@ -5,6 +5,7 @@ import { currentWeather } from "@/app/actions/weatherActions";
 import { useSearchParams } from "next/navigation";
 import moment from "moment";
 import { formatTemperature } from "@/lib/utils";
+import { useTempStore } from "@/store";
 
 const CurrentWeather = () => {
   const searchParams = useSearchParams();
@@ -30,6 +31,7 @@ const CurrentWeather = () => {
     /64x64/g,
     "128x128",
   );
+  const { isCelsius } = useTempStore();
   return (
     <section
       className={"mt-12 flex justify-between items-center lg:col-span-8"}
@@ -42,9 +44,16 @@ const CurrentWeather = () => {
         </p>
 
         <p className={"headline-xl text-gray-900"}>
-          {formatTemperature(weatherData?.current.temp_c)}&deg;/
           {formatTemperature(
-            weatherData?.forecast.forecastday[0].day.mintemp_c,
+            isCelsius
+              ? weatherData?.current.temp_c
+              : weatherData?.current.temp_f,
+          )}
+          &deg;/
+          {formatTemperature(
+            isCelsius
+              ? weatherData?.forecast.forecastday[0].day.mintemp_c
+              : weatherData?.forecast.forecastday[0].day.mintemp_f,
           )}
           &deg;
         </p>
