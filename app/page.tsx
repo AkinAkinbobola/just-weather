@@ -9,8 +9,9 @@ const Home = () => {
         <Suspense>
           <Current />
         </Suspense>
-
-        <HourlyForecast />
+        <Suspense>
+          <HourlyForecast />
+        </Suspense>
       </div>
     </main>
   );
