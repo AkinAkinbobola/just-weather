@@ -49,7 +49,7 @@ export const currentWeather = async ({
       long = location.longitude;
     }
     const response = await fetch(
-      `${api_url}/current.json?key=${process.env.NEXT_PUBLIC_API_KEY}&aqi=no&q=${lat}, ${long}`,
+      `${api_url}/forecast.json?key=${process.env.NEXT_PUBLIC_API_KEY}&aqi=no&q=${lat}, ${long}&alerts=no&days=1`,
     );
 
     if (!response.ok) {

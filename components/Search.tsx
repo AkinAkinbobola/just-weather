@@ -52,7 +52,7 @@ const Search = () => {
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
         onFocus={() => setShowDropdown(true)}
-        onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+        // onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
       />
 
       {showDropdown && suggestions.length > 0 && (

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { currentWeather } from "@/app/actions/weatherActions";
 import { useSearchParams } from "next/navigation";
+import moment from "moment";
+import { formatTemperature } from "@/lib/utils";
 
 const CurrentWeather = () => {
   const searchParams = useSearchParams();
@@ -23,10 +25,39 @@ const CurrentWeather = () => {
     fetchWeather();
   }, [searchParams]);
 
+  const time = moment(weatherData?.location.localtime).format("Do MMM, dddd");
+  const icon = `${weatherData?.current.condition.icon}`.replace(
+    /64x64/g,
+    "128x128",
+  );
   return (
-    <div>
-      {weatherData?.current.temp_c}- {weatherData?.location.name}
-    </div>
+    <section
+      className={"mt-12 flex justify-between items-center lg:col-span-8"}
+    >
+      <div className={"flex flex-col"}>
+        <p className={"body text-gray-900/60"}>{time}</p>
+
+        <p className={"headline-lg text-gray-900"}>
+          {weatherData?.location.name}
+        </p>
+
+        <p className={"headline-xl text-gray-900"}>
+          {formatTemperature(weatherData?.current.temp_c)}&deg;/
+          {formatTemperature(
+            weatherData?.forecast.forecastday[0].day.mintemp_c,
+          )}
+          &deg;
+        </p>
+      </div>
+
+      <img
+        src={icon}
+        alt={weatherData?.current.condition.text}
+        width={164}
+        height={164}
+        className={"bg-cover"}
+      />
+    </section>
   );
 };
 

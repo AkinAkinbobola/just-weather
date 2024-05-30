@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 const Home = () => {
   return (
-    <main>
+    <main className={"grid grid-cols-12"}>
       <Suspense>
         <Current />
       </Suspense>
