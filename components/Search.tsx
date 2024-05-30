@@ -12,10 +12,18 @@ const Search = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchResults[]>([]);
 
-  const handleSearch = (query: string) => {
-    setSearchInput(query);
+  const handleSearch = ({
+    lat,
+    lon,
+    text,
+  }: {
+    lat: number;
+    lon: number;
+    text: string;
+  }) => {
+    setSearchInput(text);
     setShowDropdown(false);
-    router.push(`/?search=${query}`);
+    router.push(`/?lat=${lat}&lon=${lon}`);
   };
 
   useEffect(() => {
@@ -27,6 +35,7 @@ const Search = () => {
         }
       } else {
         setSuggestions([]);
+        router.push("/");
       }
     };
     fetchSuggestions();
@@ -42,25 +51,29 @@ const Search = () => {
         }
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
-        onClick={() => setShowDropdown(!showDropdown)}
-        onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+        onFocus={() => setShowDropdown(true)}
       />
 
       {showDropdown && suggestions.length > 0 && (
         <ul className="absolute top-full left-0 right-0 bg-white rounded-md mt-2 max-h-60 overflow-auto z-10">
-          {suggestions.map((suggestion) => (
-            <li
-              key={suggestion.id}
-              className={
-                "bg-indigo-50 py-2 px-4 body text-gray-900 cursor-pointer"
-              }
-              onClick={() => handleSearch(suggestion.name)}
-            >
-              {suggestion.name}
-              {suggestion.region && `, ${suggestion.region}`}
-              {suggestion.country && `, ${suggestion.country}`}
-            </li>
-          ))}
+          {suggestions.map((suggestion) => {
+            const lat = suggestion.lat;
+            const lon = suggestion.lon;
+            const text = suggestion.name;
+            return (
+              <li
+                key={suggestion.id}
+                className={
+                  "bg-indigo-50 py-2 px-4 body text-gray-900 cursor-pointer hover:bg-indigo-400 hover:text-white"
+                }
+                onClick={() => handleSearch({ lat, lon, text })}
+              >
+                {suggestion.name}
+                {suggestion.region && `, ${suggestion.region}`}
+                {suggestion.country && `, ${suggestion.country}`}
+              </li>
+            );
+          })}
         </ul>
       )}
 
