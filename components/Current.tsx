@@ -88,14 +88,16 @@ const CurrentWeather = () => {
       ) : (
         <div className="flex justify-between lg:col-span-8 mt-12">
           <div className="flex flex-col">
-            <Skeleton className="h-[14px] w-[108px] bg-[#D8D8D8] mb-5" />
+            <Skeleton className="h-[14px] w-[108px] bg-[#D8D8D8] mb-5 rounded-none" />
             <div>
-              <Skeleton className="h-[28.84px] w-[122.16px] bg-[#D8D8D8] mb-6" />
-              <Skeleton className="h-[51.54px] w-[188.83px] bg-[#D8D8D8]" />
+              <Skeleton className="h-[28.84px] w-[122.16px] bg-[#D8D8D8] mb-6 rounded-none" />
+              <Skeleton className="h-[51.54px] w-[188.83px] bg-[#D8D8D8] rounded-none" />
             </div>
           </div>
 
-          <Skeleton className={"w-[164px] h-[154px] bg-[#EAEAEA]"} />
+          <Skeleton
+            className={"w-[164px] h-[154px] bg-[#EAEAEA] rounded-none"}
+          />
         </div>
       )}
     </>
