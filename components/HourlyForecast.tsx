@@ -64,7 +64,7 @@ const HourlyForecast = () => {
           />
 
           <div className="flex items-center overflow-x-auto gap-3 no-scrollbar">
-            {Array(10)
+            {Array(14)
               .fill(null)
               .map((_, index) => (
                 <Skeleton
