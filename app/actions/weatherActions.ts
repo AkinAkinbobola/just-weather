@@ -1,5 +1,10 @@
 const api_url = "https://api.weatherapi.com/v1";
 
+const defaultLocation: MyLocation = {
+  latitude: 37.7749, // Example: San Francisco, CA
+  longitude: -122.4194,
+};
+
 export const searchWeather = async (query?: string) => {
   try {
     const response = await fetch(
@@ -16,7 +21,7 @@ export const searchWeather = async (query?: string) => {
 };
 
 export const getCurrentLocation = (): Promise<MyLocation> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position: GeolocationPosition) => {
@@ -25,12 +30,12 @@ export const getCurrentLocation = (): Promise<MyLocation> => {
             longitude: position.coords.longitude,
           });
         },
-        (error) => {
-          reject(error);
+        () => {
+          resolve(defaultLocation);
         },
       );
     } else {
-      reject(new Error("Geolocation not supported"));
+      resolve(defaultLocation);
     }
   });
 };
