@@ -30,11 +30,13 @@ export const getCurrentLocation = (): Promise<MyLocation> => {
             longitude: position.coords.longitude,
           });
         },
-        () => {
+        (error) => {
+          console.error("Geolocation error:", error);
           resolve(defaultLocation);
         },
       );
     } else {
+      console.warn("Geolocation not supported, using default location");
       resolve(defaultLocation);
     }
   });
@@ -44,17 +46,18 @@ export const currentWeather = async ({
   long,
   lat,
 }: {
-  long?: number | undefined;
-  lat?: number | undefined;
+  long?: number;
+  lat?: number;
 }) => {
   try {
-    if (lat === 0 || long === 0) {
+    if (lat === undefined || long === undefined) {
       const location = await getCurrentLocation();
       lat = location.latitude;
       long = location.longitude;
     }
+
     const response = await fetch(
-      `${api_url}/forecast.json?key=${process.env.NEXT_PUBLIC_API_KEY}&aqi=no&q=${lat}, ${long}&alerts=no&days=1`,
+      `${api_url}/forecast.json?key=${process.env.NEXT_PUBLIC_API_KEY}&aqi=no&q=${lat},${long}&alerts=no&days=1`,
     );
 
     if (!response.ok) {
