@@ -21,8 +21,8 @@ const HourlyForecast = () => {
         try {
           setLoading(true);
           const data: CurrentResults = await currentWeather({ long, lat });
-          setLoading(false);
           setForecasts(data.forecast.forecastday[0].hour);
+          setLoading(false);
         } catch (error) {
           console.log(error);
         }
@@ -30,12 +30,11 @@ const HourlyForecast = () => {
     };
     fetchData();
   }, [params]);
-  console.log(forecasts);
   return (
     <>
       {!loading ? (
         <div className={"mt-6 bg-indigo-50 rounded-2xl py-5 px-4"}>
-          <h1 className={"uppercase body text-gray-900/60 mb-3"}>
+          <h1 className={"uppercase body-2 text-gray-900/60 mb-3"}>
             Today's Forecast
           </h1>
 
