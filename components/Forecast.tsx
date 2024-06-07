@@ -20,7 +20,7 @@ const Forecast = ({ temp, time, icon, text }: ForecastProps) => {
 
       <img src={`${icon}`} alt={`${text}`} />
 
-      <p className={"body-3 text-gray-900"}>{formatTemperature(temp)}</p>
+      <p className={"body-3 text-gray-900"}>{formatTemperature(temp)}&deg;</p>
     </div>
   );
 };

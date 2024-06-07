@@ -1,14 +1,11 @@
-const api_url = "https://api.weatherapi.com/v1";
+"use server";
 
-const defaultLocation: MyLocation = {
-  latitude: 37.7749, // Example: San Francisco, CA
-  longitude: -122.4194,
-};
+const api_url = "http://api.weatherapi.com/v1";
 
 export const searchWeather = async (query?: string) => {
   try {
     const response = await fetch(
-      `${api_url}/search.json?q=${query}&key=${process.env.NEXT_PUBLIC_API_KEY}`,
+      `${api_url}/search.json?q=${query}&key=${process.env.API_KEY}`,
     );
     if (!response.ok) {
       throw new Error(`Error fetching weather data: ${response.statusText}`);
@@ -20,44 +17,16 @@ export const searchWeather = async (query?: string) => {
   }
 };
 
-export const getCurrentLocation = (): Promise<MyLocation> => {
-  return new Promise((resolve) => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position: GeolocationPosition) => {
-          resolve({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-          resolve(defaultLocation);
-        },
-      );
-    } else {
-      console.warn("Geolocation not supported, using default location");
-      resolve(defaultLocation);
-    }
-  });
-};
-
 export const currentWeather = async ({
-  long,
   lat,
+  lon,
 }: {
-  long?: number;
   lat?: number;
+  lon?: number;
 }) => {
   try {
-    if (lat === undefined || long === undefined) {
-      const location = await getCurrentLocation();
-      lat = location.latitude;
-      long = location.longitude;
-    }
-
     const response = await fetch(
-      `${api_url}/forecast.json?key=${process.env.NEXT_PUBLIC_API_KEY}&aqi=no&q=${lat},${long}&alerts=no&days=1`,
+      `${api_url}/forecast.json?key=${process.env.API_KEY}&q=${lat}, ${lon}&days=1&aqi=no&alerts=no`,
     );
 
     if (!response.ok) {
@@ -66,6 +35,8 @@ export const currentWeather = async ({
     return await response.json();
   } catch (error) {
     console.error(error);
-    return null;
+    return {
+      message: "Error while fetching weather data",
+    };
   }
 };

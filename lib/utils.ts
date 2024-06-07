@@ -8,3 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 export const formatTemperature = (value: number | undefined) => {
   return value?.toFixed();
 };
+
+export const defaultLocation: MyLocation = {
+  latitude: 37.7749,
+  longitude: -122.4194,
+};

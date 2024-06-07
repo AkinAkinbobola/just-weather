@@ -5,31 +5,34 @@ import { currentWeather } from "@/app/actions/weatherActions";
 import { useSearchParams } from "next/navigation";
 import Forecast from "@/components/Forecast";
 import { useTempStore } from "@/store";
-import { Skeleton } from "@/components/ui/skeleton";
+import { defaultLocation } from "@/lib/utils";
+import { ForecastsSkeleton } from "@/components/Skeletons";
 
 const HourlyForecast = () => {
-  const params = useSearchParams();
+  const searchParams = useSearchParams();
+  const lat = Number(searchParams.get("lat"));
+  const lon = Number(searchParams.get("lon"));
   const { isCelsius } = useTempStore();
   const [forecasts, setForecasts] = useState<Hour[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (params) {
-        const long = Number(params.get("lon"));
-        const lat = Number(params.get("lat"));
-        try {
-          setLoading(true);
-          const data: CurrentResults = await currentWeather({ long, lat });
-          setForecasts(data.forecast.forecastday[0].hour);
-          setLoading(false);
-        } catch (error) {
-          console.log(error);
-        }
+    const fetchWeather = async () => {
+      if (lat === 0 && lon === 0) {
+        const data = await currentWeather({
+          lat: defaultLocation.latitude,
+          lon: defaultLocation.longitude,
+        });
+        setForecasts(data.forecast.forecastday[0].hour);
+        setLoading(false);
+      } else {
+        const data = await currentWeather({ lat, lon });
+        setForecasts(data.forecast.forecastday[0].hour);
+        setLoading(false);
       }
     };
-    fetchData();
-  }, [params]);
+    fetchWeather();
+  }, [searchParams]);
   return (
     <>
       {!loading ? (
@@ -56,41 +59,7 @@ const HourlyForecast = () => {
           </div>
         </div>
       ) : (
-        <Skeleton className="bg-[#EAEAEA] mt-6 rounded-2xl py-5 px-4">
-          <Skeleton
-            className={
-              "w-[155.37px] h-[11.57px] bg-[#D8D8D8] rounded-none mb-6"
-            }
-          />
-
-          <div className="flex items-center overflow-x-auto gap-3 no-scrollbar">
-            {Array(14)
-              .fill(null)
-              .map((_, index) => (
-                <Skeleton
-                  key={index}
-                  className={
-                    "flex flex-col items-center justify-center gap-3.5 rounded-none bg-[#F1EFEF] py-3 px-4 w-[95px] h-[108px]"
-                  }
-                >
-                  <Skeleton
-                    className={
-                      "bg-[#D8D8D8] rounded-none w-[59.39px] h-[11.57px]"
-                    }
-                  />
-
-                  <Skeleton
-                    className={"bg-[#D8D8D8] rounded-none w-[32px] h-[32px]"}
-                  />
-                  <Skeleton
-                    className={
-                      "bg-[#D8D8D8] rounded-none w-[23.19px] h-[11.6px]"
-                    }
-                  />
-                </Skeleton>
-              ))}
-          </div>
-        </Skeleton>
+        <ForecastsSkeleton />
       )}
     </>
   );

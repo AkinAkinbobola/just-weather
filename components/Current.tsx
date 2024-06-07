@@ -3,28 +3,29 @@
 import { useEffect, useState } from "react";
 import { currentWeather } from "@/app/actions/weatherActions";
 import { useSearchParams } from "next/navigation";
-import moment from "moment";
-import { formatTemperature } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useTempStore } from "@/store";
+import { defaultLocation, formatTemperature } from "@/lib/utils";
+import moment from "moment";
+import { CurrentWeatherSkeleton } from "@/components/Skeletons";
 
 const CurrentWeather = () => {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
+  const lat = Number(searchParams.get("lat"));
+  const lon = Number(searchParams.get("lon"));
   const [weatherData, setWeatherData] = useState<CurrentResults>();
 
   useEffect(() => {
     const fetchWeather = async () => {
-      if (searchParams) {
-        setLoading(true);
-        const lat = Number(searchParams.get("lat"));
-        const long = Number(searchParams.get("lon"));
-        const data = await currentWeather({ long, lat });
+      if (lat === 0 && lon === 0) {
+        const data = await currentWeather({
+          lat: defaultLocation.latitude,
+          lon: defaultLocation.longitude,
+        });
         setWeatherData(data);
         setLoading(false);
       } else {
-        setLoading(true);
-        const data = await currentWeather({});
+        const data = await currentWeather({ lat, lon });
         setWeatherData(data);
         setLoading(false);
       }
@@ -43,7 +44,7 @@ const CurrentWeather = () => {
       {!loading ? (
         <section className={"mt-12 flex justify-between items-center"}>
           <div className={"flex flex-col"}>
-            <p className={"body text-gray-900/60"}>{time}</p>
+            <p className={"body text-gray-900/60"}>{}</p>
 
             <p className={"headline-lg text-gray-900"}>
               {weatherData?.location.name}
@@ -74,19 +75,7 @@ const CurrentWeather = () => {
           />
         </section>
       ) : (
-        <div className="flex justify-between lg:col-span-8 mt-12">
-          <div className="flex flex-col">
-            <Skeleton className="h-[14px] w-[108px] bg-[#D8D8D8] mb-5 rounded-none" />
-            <div>
-              <Skeleton className="h-[28.84px] w-[122.16px] bg-[#D8D8D8] mb-6 rounded-none" />
-              <Skeleton className="h-[51.54px] w-[188.83px] bg-[#D8D8D8] rounded-none" />
-            </div>
-          </div>
-
-          <Skeleton
-            className={"w-[164px] h-[154px] bg-[#EAEAEA] rounded-none"}
-          />
-        </div>
+        <CurrentWeatherSkeleton />
       )}
     </>
   );
