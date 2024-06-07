@@ -2,6 +2,7 @@ import Image from "next/image";
 import Search from "@/components/Search";
 import TempToggle from "@/components/TempToggle";
 import Link from "next/link";
+import { Suspense } from "react";
 
 const Header = () => {
   return (
@@ -18,7 +19,9 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-4 flex-grow w-full sm:w-auto">
-        <Search />
+        <Suspense>
+          <Search />
+        </Suspense>
         <TempToggle />
       </div>
     </section>
