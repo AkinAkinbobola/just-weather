@@ -3,7 +3,6 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
-import Head from "next/head";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -11,21 +10,13 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
+  title: "Just Weather",
   description: "Next JS Weather App",
   icons: {
     icon: "/assets/icons/favicon.png",
   },
 };
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      bds: React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      >;
-    }
-  }
-}
+
 export default function RootLayout({
   children,
 }: Readonly<{

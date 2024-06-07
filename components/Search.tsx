@@ -7,6 +7,7 @@ import { RecentSearches, useRecentStore, useTempStore } from "@/store";
 import { currentWeather, searchWeather } from "@/app/actions/weatherActions";
 import { formatTemperature } from "@/lib/utils";
 import Image from "next/image";
+import { X } from "lucide-react";
 
 const Search = () => {
   const searchParams = useSearchParams();
@@ -18,10 +19,9 @@ const Search = () => {
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearchInput] = useDebounce(searchInput, 300);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showRecent, setShowRecent] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchResults[]>([]);
-  const [location, setLocation] = useState<MyLocation>();
-  const handleSearch = ({
+
+  const handleSearch = async ({
     lat,
     lon,
     text,
@@ -34,6 +34,8 @@ const Search = () => {
     if (lat && lon) {
       params.set("lat", lat.toString());
       params.set("lon", lon.toString());
+      const data: RecentSearches = await currentWeather({ lat, lon });
+      addRecentSearch(data);
       replace(`${pathname}?${params.toString()}`);
       setSearchInput(text);
     }
@@ -51,18 +53,48 @@ const Search = () => {
     fetchData();
   }, [debouncedSearchInput]);
 
+  useEffect(() => {
+    const fetchCurrentLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            const data = await currentWeather({
+              lat: latitude,
+              lon: longitude,
+            });
+            addRecentSearch(data);
+          },
+          (error) => {
+            console.error("Error fetching location:", error);
+          },
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    fetchCurrentLocation();
+  }, []);
   return (
     <div className="flex-grow relative">
-      <input
-        type="text"
-        placeholder="Search for cities"
-        className="bg-indigo-50 border-none outline-none rounded-md py-2 px-5 w-full focus:outline-indigo-400"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        onFocus={() => setShowDropdown(true)}
-        onBlur={() => setShowDropdown(false)}
-      />
-
+      <div
+        className={`flex justify-between items-center bg-indigo-50 outline-none rounded-md py-2 px-5 w-full border-2  ${showDropdown && " border-indigo-400"}`}
+      >
+        <input
+          type="text"
+          placeholder="Search for cities"
+          className="bg-indigo-50 outline-none w-full"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          onFocus={() => setShowDropdown(true)}
+          onBlur={() => setShowDropdown(false)}
+        />
+        <X
+          onMouseDown={() => setSearchInput("")}
+          className={"cursor-pointer"}
+        />
+      </div>
       {showDropdown && suggestions.length > 0 && (
         <ul className="absolute top-full left-0 right-0 bg-white rounded-md mt-2 max-h-60 overflow-auto z-10">
           {suggestions.map((suggestion) => {
@@ -103,7 +135,7 @@ const Search = () => {
               <p className="headline-sm text-gray-900">Recent</p>
               <p
                 className="text-[#5C6BC0]/60 cursor-pointer body-3"
-                onClick={clearAll}
+                onMouseDown={clearAll}
               >
                 Clear all
               </p>
@@ -122,7 +154,7 @@ const Search = () => {
                 >
                   <div
                     className="flex items-center gap-4"
-                    onClick={() => handleSearch({ lat, lon, text })}
+                    onMouseDown={() => handleSearch({ lat, lon, text })}
                   >
                     <img
                       src={recent.current.condition.icon}
@@ -147,7 +179,7 @@ const Search = () => {
                     alt="Delete Icon"
                     width={16}
                     height={18}
-                    onClick={() => removeRecentSearch(lat, lon)}
+                    onMouseDown={() => removeRecentSearch(lat, lon)}
                   />
                 </div>
               );
