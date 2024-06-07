@@ -33,10 +33,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <title>Just Weather</title>
-        <bds />
-      </head>
       <body className={cn("container bg-gray-100 pb-12", nunito.className)}>
         <Header />
         {children}

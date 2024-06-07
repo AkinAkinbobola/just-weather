@@ -5,8 +5,8 @@ import WeatherDetails from "@/components/WeatherDetails";
 
 const Home = () => {
   return (
-    <main className={"grid grid-cols-12"}>
-      <div className={"md:col-span-12"}>
+    <main>
+      <div>
         <Suspense>
           <Current />
         </Suspense>
