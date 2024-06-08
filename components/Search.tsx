@@ -100,7 +100,7 @@ const Search = () => {
           {suggestions.map((suggestion) => {
             const lat = suggestion.lat;
             const lon = suggestion.lon;
-            const text = suggestion.name;
+            const text = `${suggestion.name}${suggestion.region ? `, ${suggestion.region}` : ""}${suggestion.country ? `, ${suggestion.country}` : ""}`;
             return (
               <li
                 key={suggestion.id}
