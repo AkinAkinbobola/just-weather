@@ -52,38 +52,6 @@ export const ForecastsSkeleton = () => {
 
 export const WeatherDetailsSkeleton = () => {
   return (
-    <Skeleton className={"bg-[#EAEAEA] rounded-none mt-6 py-5 px-4 h-[308px]"}>
-      <Skeleton
-        className={"rounded-none bg-[#D8D8D8] w-[147.51px] h-[11.57px] mb-6"}
-      />
-
-      <div className={"grid grid-cols-4 gap-4"}>
-        {Array(8)
-          .fill(null)
-          .map((_, i) => (
-            <Skeleton
-              key={i}
-              className={
-                "bg-[#F1EFEF] rounded-none w-[241px] h-[105px] flex items-center justify-between  py-5 px-5"
-              }
-            >
-              <div className={"flex flex-col gap-5"}>
-                <Skeleton
-                  className={
-                    "rounded-none w-[52.26px] h-[11.57px] bg-[#D8D8D8]"
-                  }
-                />
-                <Skeleton
-                  className={"rounded-none w-[93.16px] h-[18.8px] bg-[#D8D8D8]"}
-                />
-              </div>
-
-              <Skeleton
-                className={"w-[26.67px] h-[25.49px] bg-[#D8D8D8] rounded-none"}
-              />
-            </Skeleton>
-          ))}
-      </div>
-    </Skeleton>
+    <Skeleton className={"bg-[#EAEAEA] mt-6 py-5 px-4 h-[308px] rounded-2xl"} />
   );
 };
