@@ -2,37 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { currentWeather } from "@/app/actions/weatherActions";
-import { useSearchParams } from "next/navigation";
 import { useTempStore } from "@/store";
-import { defaultLocation, formatTemperature } from "@/lib/utils";
+import { formatTemperature } from "@/lib/utils";
 import moment from "moment";
 import { CurrentWeatherSkeleton } from "@/components/Skeletons";
 
-const CurrentWeather = () => {
-  const searchParams = useSearchParams();
+const CurrentWeather = ({ lat, lon }: { lat?: number; lon?: number }) => {
   const [loading, setLoading] = useState(true);
-  const lat = Number(searchParams.get("lat"));
-  const lon = Number(searchParams.get("lon"));
   const [weatherData, setWeatherData] = useState<CurrentResults>();
 
   useEffect(() => {
-    const fetchWeather = async () => {
-      if (lat === 0 && lon === 0) {
-        const data = await currentWeather({
-          lat: defaultLocation.latitude,
-          lon: defaultLocation.longitude,
-        });
-        setWeatherData(data);
-        setLoading(false);
-      } else {
+    const fetchData = async () => {
+      if (lat !== undefined && lon !== undefined) {
         const data = await currentWeather({ lat, lon });
         setWeatherData(data);
         setLoading(false);
       }
     };
-    fetchWeather();
-  }, [searchParams]);
-
+    fetchData();
+  }, [lat, lon]);
   const time = moment(weatherData?.location.localtime).format("Do MMM, dddd");
   const icon = `${weatherData?.current.condition.icon}`.replace(
     /64x64/g,
@@ -44,7 +32,7 @@ const CurrentWeather = () => {
       {!loading ? (
         <section className={"mt-12 flex justify-between items-center"}>
           <div className={"flex flex-col"}>
-            <p className={"body text-gray-900/60"}>{}</p>
+            <p className={"body text-gray-900/60"}>{time}</p>
 
             <p className={"headline-lg text-gray-900"}>
               {weatherData?.location.name}

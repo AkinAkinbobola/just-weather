@@ -2,37 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { currentWeather } from "@/app/actions/weatherActions";
-import { useSearchParams } from "next/navigation";
 import Forecast from "@/components/Forecast";
 import { useTempStore } from "@/store";
-import { defaultLocation } from "@/lib/utils";
 import { ForecastsSkeleton } from "@/components/Skeletons";
 
-const HourlyForecast = () => {
-  const searchParams = useSearchParams();
-  const lat = Number(searchParams.get("lat"));
-  const lon = Number(searchParams.get("lon"));
+const HourlyForecast = ({ lat, lon }: { lat?: number; lon?: number }) => {
   const { isCelsius } = useTempStore();
   const [forecasts, setForecasts] = useState<Hour[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchWeather = async () => {
-      if (lat === 0 && lon === 0) {
-        const data = await currentWeather({
-          lat: defaultLocation.latitude,
-          lon: defaultLocation.longitude,
-        });
-        setForecasts(data.forecast.forecastday[0].hour);
-        setLoading(false);
-      } else {
+      if (lat !== undefined && lon !== undefined) {
         const data = await currentWeather({ lat, lon });
         setForecasts(data.forecast.forecastday[0].hour);
         setLoading(false);
       }
     };
     fetchWeather();
-  }, [searchParams]);
+  }, [lat, lon]);
   return (
     <>
       {!loading ? (

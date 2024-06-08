@@ -1,33 +1,20 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { currentWeather } from "@/app/actions/weatherActions";
 import Detail from "@/components/Detail";
 import { useTempStore } from "@/store";
 import { WeatherDetailsSkeleton } from "@/components/Skeletons";
-import { defaultLocation } from "@/lib/utils";
 
-const WeatherDetails = () => {
+const WeatherDetails = ({ lat, lon }: { lat?: number; lon?: number }) => {
   const { isCelsius } = useTempStore();
-  const searchParams = useSearchParams();
-  const lat = Number(searchParams.get("lat"));
-  const lon = Number(searchParams.get("lon"));
   const [loading, setLoading] = useState(true);
   const [day, setDay] = useState<ForecastDay>();
   const [current, setCurrent] = useState<Current>();
 
   useEffect(() => {
     const fetchWeather = async () => {
-      if (lat === 0 && lon === 0) {
-        const data = await currentWeather({
-          lat: defaultLocation.latitude,
-          lon: defaultLocation.longitude,
-        });
-        setDay(data.forecast.forecastday[0]);
-        setCurrent(data.current);
-        setLoading(false);
-      } else {
+      if (lat !== undefined && lon !== undefined) {
         const data = await currentWeather({ lat, lon });
         setDay(data.forecast.forecastday[0]);
         setCurrent(data.current);
@@ -35,7 +22,7 @@ const WeatherDetails = () => {
       }
     };
     fetchWeather();
-  }, [searchParams]);
+  }, [lat, lon]);
 
   const chance_of_rain = `${day?.day.daily_chance_of_rain}%`;
   const pressure = isCelsius
