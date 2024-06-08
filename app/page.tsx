@@ -2,15 +2,17 @@
 
 import Current from "@/components/Current";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import HourlyForecast from "@/components/HourlyForecast";
 import WeatherDetails from "@/components/WeatherDetails";
 
-const Home = () => {
+const Home = ({
+  searchParams,
+}: {
+  searchParams: { lat?: string; lon?: string };
+}) => {
   const [location, setLocation] = useState<Partial<GeolocationCoordinates>>();
-  const searchParams = useSearchParams();
-  const lat = Number(searchParams.get("lat"));
-  const lon = Number(searchParams.get("lon"));
+  const lat = Number(searchParams.lat);
+  const lon = Number(searchParams.lon);
   useEffect(() => {
     const handleLocation = () => {
       if (!isNaN(lat) && !isNaN(lon) && lat !== 0 && lon !== 0) {
